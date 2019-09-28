@@ -5,14 +5,15 @@
         <h4 class="title">Register to create a new account</h4>
       </div>
       <div class="content">
-        <form>
+        {{message}}
+        <form ref="frmRegister" @submit.prevent="handleSubmit">
           <div class="form-group">
             <label class="label" for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="name" required />
+            <input type="text" class="form-control" v-model="name" id="name" placeholder="name" required />
           </div>
           <div class="form-group">
             <label class="label" for="email">Email address</label>
-            <input type="email" class="form-control" id="email" placeholder="email" required />
+            <input type="email" class="form-control" v-model="email" id="email" placeholder="email" required />
           </div>
           <div class="form-group">
             <label class="label" for="password">Password</label>
@@ -21,6 +22,7 @@
               class="form-control"
               id="password"
               placeholder="password"
+              v-model="password"
               required
             />
           </div>
@@ -33,8 +35,39 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
-  name: "RegistrationForm"
+  name: "RegistrationForm",
+  data(){
+    return{
+      name : '',
+      email : '',
+      password : '',
+      message: ''
+    }
+  },
+  methods:{
+    handleSubmit(){
+      axios({
+        method: 'POST',
+        url: 'https://jsonplaceholder.typicode.com/posts',
+        data: {
+          name: this.name,
+          email: this.email,
+          password: this.password
+        }
+      })
+      .then(response => {
+        this.name = ''
+        this.email = ''
+        this.password = ''
+        this.message = "successfully registered!";          
+      })
+      .catch(error => {
+        this.message = error.response.data
+      })
+    }
+  }
 };
 </script>
 
