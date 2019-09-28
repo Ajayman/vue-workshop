@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <CalculatorMovie />
+    <counter />
   </div>
 </template>
 
 <script>
-import CalculatorMovie from "./components/CalculatorMovie.vue";
+import Counter from "./components/Counter.vue";
 
 export default {
   name: "app",
   components: {
-    CalculatorMovie
+    Counter
   }
 };
 </script>

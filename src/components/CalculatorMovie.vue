@@ -45,7 +45,7 @@ export default {
     return {
       num1: 0,
       num2: 0,
-      movie: 'Joker'
+      movie: ''
     }
   }
 };
