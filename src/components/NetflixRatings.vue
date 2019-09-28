@@ -5,23 +5,27 @@
         <div>
           <h4 class="title">Netflix Ratings</h4>
           <div class="actions">
-            <button class="btn">Lowest rated</button>
-            <button class="btn">Highest rated</button>
+            <button class="btn" @click="getLowestRated">Lowest rated</button>
+            <button class="btn" @click="getHighestRated">Highest rated</button>
           </div>
         </div>
         <div class="search">
-          <input type="text" class="form-control" placeholder="Search by title" />
+          <input type="text" class="form-control" v-model="movie" placeholder="Search by title" />
         </div>
       </div>
       <div class="content">
         <table class="table">
           <thead>
-            <th></th>
+            <th v-for="(column, index) in columns" :key="index">
+              {{column}}
+            </th>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
+            <tr v-for="(ratinginfo, index) in filterMovies" :key="index">
+              <td>{{ratinginfo.title}}</td>
+              <td>{{ratinginfo.rating}}</td>
+              <td v-if="ratinginfo.rating>90">High</td>
+              <td v-else>Low</td>
             </tr>
           </tbody>
         </table>
@@ -35,7 +39,8 @@ export default {
   name: "NetflixRatings",
   data: function() {
     return {
-      columns: ["title", "rating"],
+      movie: '',
+      columns: ["title", "rating", "status"],
       ratingsInfo: [
         { title: `Grey's Anatomy`, rating: 98 },
         { title: `Prison Break`, rating: 98 },
@@ -59,6 +64,19 @@ export default {
         { title: `Marvel's Iron Fist`, rating: 98 }
       ]
     };
+  },
+  computed: {
+    filterMovies () {
+      return this.ratingsInfo.filter(movie => movie.title.toLowerCase().match(this.movie.toLowerCase()))
+    }
+  },
+  methods: {
+    getLowestRated() {
+      this.ratingsInfo.sort((a, b) => a.rating-b.rating)
+    },
+    getHighestRated() {
+      this.ratingsInfo.sort((a, b) => b.rating-a.rating)
+    }
   }
 };
 </script>
