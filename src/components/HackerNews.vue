@@ -5,10 +5,10 @@
         <h4 class="title">Netflix Ratings</h4>
       </div>
       <div class="search">
-        <input type="text" class="form-control" placeholder="Search by title" />
+        <input type="text" class="form-control" v-model="searchNews" placeholder="Search by title" />
       </div>
       <div class="content">
-        <div>
+        <div v-if="filterNewsList.length<=0">
           <p>Loading news</p>
         </div>
         <div>
@@ -16,9 +16,9 @@
             <p></p>
           </div>
           <ul class="list">
-            <li>
-              <a href></a>
-              <span>By:</span>
+            <li v-for="(news, index) in filterNewsList" :key="index">
+              <a :href="news.url" target="_blank">{{news.title}}</a>
+              <span>By: {{news.author}}</span>
             </li>
           </ul>
         </div>
@@ -28,8 +28,48 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: "HackerNews"
+  name: "HackerNews",
+  data(){
+    return{
+      searchNews: '',
+      newsList:[]
+    }
+  },
+  watch: {
+    searchNews(title){
+      this.searchNewsByTitle(title)
+    }
+  },
+  computed: {
+    filterNewsList() {
+      return this.newsList.filter(news => news.title)
+    }
+  },
+  async created(){
+    try{
+      const response = await axios.get("http://hn.algolia.com/api/v1/search")
+      console.log(response)
+      this.newsList = response.data.hits
+    }
+    catch(error){
+
+    }
+  },
+  methods: {
+    searchNewsByTitle(title) {
+      axios({
+        url: 'https://hn.algolia.com/api/v1/search',
+        params: {
+          query: title
+        }
+      })
+      .then(response => {
+        this.newsList = response.data.hits
+      })
+    }
+  }
 };
 </script>
 
