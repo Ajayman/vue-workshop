@@ -5,9 +5,9 @@
         <h4 class="title">Increment or decrement a number</h4>
       </div>
       <div class="content">
-        <button type="button" class="btn" @click="increment">+</button>
+        <button type="button" class="btn" @click="increment" :disabled="count>100">+</button>
         <span class="counter">{{ count }}</span>
-        <button type="button" class="btn" @click="decrement">-</button>
+        <button type="button" class="btn" @click="decrement" :disabled="count<=0">-</button>
       </div>
     </div>
   </div>
@@ -22,10 +22,10 @@ export default {
   },
   methods: {
     increment() {
-      this.count++
+      this.count++;  
     },
     decrement() {
-      this.count--
+      this.count--;
     }
   }
 };
