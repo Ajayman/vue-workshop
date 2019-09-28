@@ -1,22 +1,27 @@
 <template>
   <div class="container">
     <div class="card">
+      {{newComment.length}}
       <div class="comment">
         <div class="comment__img">
           <img src="../assets/ts.jpg" alt="Profile picture" />
         </div>
+             
         <div class="comment__content">
-          <ul class="comment-list">
+          <ul class="comment-list" v-for="(comment, index) in commentList" :key="index">
             <li>
-              <span></span>
+              <span>{{ comment }} <button name="deletecomment" @click="deleteComment(index)">X</button></span>
             </li>
           </ul>
-          <div class="no-comments">
+          <div class="no-comments" v-if="!commentList.length">
             <p>No comments added yet</p>
+          </div>
+          <div v-else>
+            comments ({{commentList.length}})
           </div>
         </div>
         <div class="comment-box">
-          <textarea class="form-control" rows="3" placeholder="Write a comment"></textarea>
+          <textarea class="form-control" rows="3" placeholder="Write a comment" v-model.trim="newComment" @keyup.enter="addNewComment"></textarea>
         </div>
       </div>
     </div>
@@ -25,7 +30,24 @@
 
 <script>
 export default {
-  name: "PhotoComment"
+  name: "PhotoComment",
+  data () {
+    return {
+      newComment: '',
+      commentList: []
+    }
+  },
+  methods: {
+    addNewComment() {
+      if(this.newComment){
+        this.commentList.push(this.newComment)
+        this.newComment = ''
+      }     
+    },
+    deleteComment(indexOfComment) {
+      this.commentList.splice(indexOfComment, 1)
+    }
+  }
 };
 </script>
 
